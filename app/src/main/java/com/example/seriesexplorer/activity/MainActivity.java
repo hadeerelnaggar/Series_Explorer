@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 seriesList.setAdapter(new SeriesRecyclerViewAdapter(series,R.layout.seriesrecyclerviewitem,getApplicationContext()));
                 Log.d(TAG, "Number of movies received: " + series.size());
             }
-
             @Override
             public void onFailure(Call<SeriesResponse> call, Throwable t) {
 

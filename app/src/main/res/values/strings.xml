@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">series explorer</string>
+    <string name="todo">TODO</string>
+    <string name="seriesname">seriesname</string>
+    <string name="this_series_talks_about_and_incridible_action_series">this series talks about and incridible action series</string>
+    <string name="series_photo">series photo</string>
+    <string name="rating">rating</string>
+</resources>
