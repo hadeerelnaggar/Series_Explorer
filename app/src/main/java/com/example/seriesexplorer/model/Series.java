@@ -2,8 +2,18 @@ package com.example.seriesexplorer.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Series {
+import java.io.Serializable;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "wishlistseries")
+public class Series implements Serializable {
+    @PrimaryKey
     @SerializedName("id")
+    @NonNull
     private String id;
     @SerializedName("original_name")
     private String name;
@@ -13,15 +23,35 @@ public class Series {
     String imageURL;
     @SerializedName("vote_average")
     double rating;
+    @SerializedName("homepage")
+    String homepage;
 
+    public String getHomepage() {
+        return homepage;
+    }
+
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
+
+    @Ignore
     public Series(String id, String name, String description, String imageURL, double rating) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imageURL = imageURL;
         this.rating = rating;
+        this.homepage=null;
     }
 
+    public Series(String id, String name, String description, String imageURL, double rating, String homepage) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageURL = imageURL;
+        this.rating = rating;
+        this.homepage = homepage;
+    }
 
     public String getId() {
         return id;

@@ -50,11 +50,7 @@ public class SeriesRecyclerViewAdapter extends RecyclerView.Adapter<SeriesHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,seriesdetailsactivity.class);
-                intent.putExtra("seriesId",series.get(position).getId());
-                intent.putExtra("seriesname",series.get(position).getName());
-                intent.putExtra("seriesdesription",series.get(position).getDescription());
-                intent.putExtra("rating",series.get(position).getRating());
-                intent.putExtra("imageurl",series.get(position).getImageURL());
+                intent.putExtra("series",series.get(position));
                 context.startActivity(intent);
             }
         });

@@ -39,13 +39,19 @@
                 android:id="@+id/go"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="go">
+                android:text="@string/go_to_homepage"
+                android:background="@color/colorPrimary"
+                android:layout_margin="10dp"
+                android:padding="10dp">
             </Button>
             <Button
                 android:id="@+id/addtowishlist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="add to wishlist">
+                android:text="@string/add_to_wishlist"
+                android:background="@color/colorPrimary"
+                android:layout_margin="10dp"
+                android:padding="10dp">
             </Button>
         </LinearLayout>
     </LinearLayout>

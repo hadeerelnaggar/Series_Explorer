@@ -10,10 +10,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,22 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.seriesexplorer.R;
-import com.example.seriesexplorer.adapter.SeriesRecyclerViewAdapter;
+import com.example.seriesexplorer.RoomDatabase.AppDataBase;
 import com.example.seriesexplorer.model.Series;
-import com.example.seriesexplorer.model.SeriesDetails;
-import com.example.seriesexplorer.model.SeriesResponse;
 import com.example.seriesexplorer.rest.SeriesApiHandler;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
-import static com.example.seriesexplorer.activity.MainActivity.BASE_URL;
 
 public class seriesdetailsactivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -54,7 +40,7 @@ public class seriesdetailsactivity extends AppCompatActivity {
     Button homepage;
     @BindView(R.id.addtowishlist)
     Button addtowishlist;
-    String homepageurl;
+    AppDataBase mDb;
 
 
     @Override
@@ -62,29 +48,38 @@ public class seriesdetailsactivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seriesdetailsactivity);
         ButterKnife.bind(this);
-        String id = getIntent().getStringExtra("seriesId");
-        String name = getIntent().getStringExtra("seriesname");
-        String description = getIntent().getStringExtra("seriesdesription");
-        double rating = getIntent().getDoubleExtra("rating", 0.0);
-        String imageUrl = getIntent().getStringExtra("imageurl");
-        series = new Series(id, name, description, imageUrl, rating);
-        connectAndGetApi();
+        series=(Series)getIntent().getSerializableExtra("series");
+        mDb=AppDataBase.getInstance(getApplicationContext());
+        disableWishListButton();
+        if(series.getHomepage()==null)
+        {
+             connectAndGetApi();
+        }
         series_name.setText(series.getName());
+        if(series.getHomepage()==null){
+            homepage.setClickable(false);
+        }
         Series_description.setText(series.getDescription());
         homepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browse = new Intent(Intent.ACTION_VIEW , Uri.parse(homepageurl));
+                Intent browse = new Intent(Intent.ACTION_VIEW , Uri.parse(series.getHomepage()));
                 startActivity( browse );
             }
         });
         addtowishlist.setOnClickListener(new View.OnClickListener() {
+            final Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mDb.taskDao().insertSeries(series);
+                    disableWishListButton();
+                }
+            });
             @Override
             public void onClick(View v) {
-
+                thread.start();
             }
         });
-
     }
 
     private void connectAndGetApi(){
@@ -96,19 +91,36 @@ public class seriesdetailsactivity extends AppCompatActivity {
         }
         SeriesApiHandler seriesApiService = retrofit.create(SeriesApiHandler.class);
         System.out.println(series.getId());
-        Call<SeriesDetails> call = seriesApiService.getSeriesDetails(series.getId(),API_KEY);
-        call.enqueue(new Callback<SeriesDetails>() {
+        Call<Series> call = seriesApiService.getSeriesDetails(series.getId(),API_KEY);
+        call.enqueue(new Callback<Series>() {
             @Override
-            public void onResponse(Call<SeriesDetails> call, Response<SeriesDetails> response) {
+            public void onResponse(Call<Series> call, Response<Series> response) {
                 if(response.isSuccessful()){
-                SeriesDetails seriesDetails = response.body();
-                  homepageurl=seriesDetails.getHomepage();
+                    series = response.body();
                 }
             }
             @Override
-            public void onFailure(Call<SeriesDetails> call, Throwable t) {
+            public void onFailure(Call<Series> call, Throwable t) {
 
             }
         });
+    }
+    public void disableWishListButton(){
+        Thread thread =new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Series check=mDb.taskDao().getTaskById(series.getId());
+                if(check==null){
+                    addtowishlist.setClickable(true);
+                    addtowishlist.setFocusable(true);
+                }
+                else{
+                    addtowishlist.setClickable(false);
+                    addtowishlist.setFocusable(false);
+                    addtowishlist.setAlpha((float) 0.7);
+                }
+            }
+        });
+        thread.start();
     }
 }
