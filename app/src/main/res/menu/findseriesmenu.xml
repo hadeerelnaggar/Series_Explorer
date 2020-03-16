@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    >
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/search"
+        android:title="search"
+        android:icon="@drawable/ic_search_black_24dp"
+        app:showAsAction="collapseActionView|ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
     <item android:title="Popular"
         android:id="@+id/popular"/>
     <item android:title="Top Rated"
         android:id="@+id/top_rated"/>
     <item android:title="WishList"
-        android:id="@+id/favorites"/>
+        android:id="@+id/favorites"
+        android:icon="@drawable/ic_bookmark_border_black_24dp"/>
 </menu>
