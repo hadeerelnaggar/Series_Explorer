@@ -16,6 +16,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.example.seriesexplorer.R;
 import com.example.seriesexplorer.RoomDatabase.AppDataBase;
 import com.example.seriesexplorer.model.Series;
 import com.example.seriesexplorer.rest.SeriesApiHandler;
+import com.squareup.picasso.Picasso;
 
 public class seriesdetailsactivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -32,8 +34,12 @@ public class seriesdetailsactivity extends AppCompatActivity {
     Series series;
     @BindView(R.id.pagelayout)
     LinearLayout pagelayout;
+    @BindView(R.id.image)
+    ImageView image;
     @BindView(R.id.series_name)
     TextView series_name;
+    @BindView(R.id.rating)
+    TextView rating;
     @BindView(R.id.series_description)
     TextView Series_description;
     @BindView(R.id.go)
@@ -41,6 +47,7 @@ public class seriesdetailsactivity extends AppCompatActivity {
     @BindView(R.id.addtowishlist)
     Button addtowishlist;
     AppDataBase mDb;
+    public static final String IMAGE_URL_BASE_PATH="http://image.tmdb.org/t/p/w342//";
 
 
     @Override
@@ -51,11 +58,15 @@ public class seriesdetailsactivity extends AppCompatActivity {
         series=(Series)getIntent().getSerializableExtra("series");
         mDb=AppDataBase.getInstance(getApplicationContext());
         disableWishListButton();
+        String image_url = IMAGE_URL_BASE_PATH + series.getImageURL();
+        if(image_url!=null)
+            Picasso.get().load(image_url).into(image);
         if(series.getHomepage()==null)
         {
              connectAndGetApi();
         }
         series_name.setText(series.getName());
+        rating.setText(Double.toString(series.getRating())+"/10");
         if(series.getHomepage()==null){
             homepage.setClickable(false);
         }

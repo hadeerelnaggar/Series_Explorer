@@ -2,9 +2,10 @@
     <string name="app_name">series explorer</string>
     <string name="todo">TODO</string>
     <string name="seriesname">seriesname</string>
-    <string name="this_series_talks_about_and_incridible_action_series">this series talks about and incridible action series</string>
+    <string name="this_series_talks_about_and_incridible_action_series">This series talks about and incridible action series</string>
     <string name="series_photo">series photo</string>
-    <string name="rating">rating</string>
+    <string name="rating">Rating</string>
     <string name="go_to_homepage">go to homepage</string>
     <string name="add_to_wishlist">add to wishlist</string>
+    <string name="description">Description</string>
 </resources>
