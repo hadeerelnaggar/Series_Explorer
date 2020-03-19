@@ -19,10 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class SeriesRecyclerViewAdapter extends RecyclerView.Adapter<SeriesHolder> {
-    List<Series> series;
+    private List<Series> series;
     private int rowLayout;
-    Context context;
-    public static final String IMAGE_URL_BASE_PATH="http://image.tmdb.org/t/p/w342//";
+    private Context context;
+    private static final String IMAGE_URL_BASE_PATH="http://image.tmdb.org/t/p/w342//";
 
     public SeriesRecyclerViewAdapter(List<Series> series, int rowLayout, Context context) {
         this.series = series;
@@ -46,13 +46,10 @@ public class SeriesRecyclerViewAdapter extends RecyclerView.Adapter<SeriesHolder
         String rate="rating:"+series.get(position).getRating();
         holder.rating.setText(rate);
         Picasso.get().load(image_url).into(holder.seriesImage);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,seriesdetailsactivity.class);
-                intent.putExtra("series",series.get(position));
-                context.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context,seriesdetailsactivity.class);
+            intent.putExtra("series",series.get(position));
+            context.startActivity(intent);
         });
     }
 
@@ -68,7 +65,7 @@ class SeriesHolder extends RecyclerView.ViewHolder{
     TextView seriesDescription;
     TextView rating;
 
-    public SeriesHolder(@NonNull View itemView) {
+    SeriesHolder(@NonNull View itemView) {
         super(itemView);
         seriesname=itemView.findViewById(R.id.series_name);
         seriesImage=itemView.findViewById(R.id.series_image);

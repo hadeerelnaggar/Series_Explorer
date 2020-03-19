@@ -12,8 +12,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,7 +25,6 @@ import com.example.seriesexplorer.rest.SeriesApiHandler;
 import com.squareup.picasso.Picasso;
 
 public class seriesdetailsactivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
     public static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static Retrofit retrofit = null;
     private final static String API_KEY = "07ad75bcb5f5916bf449961df56037a6";
@@ -59,24 +56,21 @@ public class seriesdetailsactivity extends AppCompatActivity {
         mDb=AppDataBase.getInstance(getApplicationContext());
         disableWishListButton();
         String image_url = IMAGE_URL_BASE_PATH + series.getImageURL();
-        if(image_url!=null)
+        if(series.getImageURL()!=null)
             Picasso.get().load(image_url).into(image);
         if(series.getHomepage()==null)
         {
              connectAndGetApi();
         }
         series_name.setText(series.getName());
-        rating.setText(Double.toString(series.getRating())+"/10");
+        rating.setText(series.getRating() +"/10");
         if(series.getHomepage()==null){
             homepage.setClickable(false);
         }
         Series_description.setText(series.getDescription());
-        homepage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browse = new Intent(Intent.ACTION_VIEW , Uri.parse(series.getHomepage()));
-                startActivity( browse );
-            }
+        homepage.setOnClickListener(v -> {
+            Intent browse = new Intent(Intent.ACTION_VIEW , Uri.parse(series.getHomepage()));
+            startActivity( browse );
         });
         addtowishlist.setOnClickListener(new View.OnClickListener() {
             final Thread thread = new Thread(new Runnable() {
@@ -117,19 +111,16 @@ public class seriesdetailsactivity extends AppCompatActivity {
         });
     }
     public void disableWishListButton(){
-        Thread thread =new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Series check=mDb.taskDao().getTaskById(series.getId());
-                if(check==null){
-                    addtowishlist.setClickable(true);
-                    addtowishlist.setFocusable(true);
-                }
-                else{
-                    addtowishlist.setClickable(false);
-                    addtowishlist.setFocusable(false);
-                    addtowishlist.setAlpha((float) 0.7);
-                }
+        Thread thread =new Thread(() -> {
+            Series check=mDb.taskDao().getTaskById(series.getId());
+            if(check==null){
+                addtowishlist.setClickable(true);
+                addtowishlist.setFocusable(true);
+            }
+            else{
+                addtowishlist.setClickable(false);
+                addtowishlist.setFocusable(false);
+                addtowishlist.setAlpha((float) 0.7);
             }
         });
         thread.start();
