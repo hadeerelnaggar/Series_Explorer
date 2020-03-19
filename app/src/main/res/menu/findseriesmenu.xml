@@ -5,7 +5,8 @@
         android:title="search"
         android:icon="@drawable/ic_search_black_24dp"
         app:showAsAction="collapseActionView|ifRoom"
-        app:actionViewClass="android.widget.SearchView"/>
+        app:actionViewClass="android.widget.SearchView"
+        />
     <item android:title="Popular"
         android:id="@+id/popular"/>
     <item android:title="Top Rated"

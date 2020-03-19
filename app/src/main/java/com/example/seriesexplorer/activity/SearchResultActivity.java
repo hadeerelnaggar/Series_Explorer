@@ -75,7 +75,7 @@ public class SearchResultActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<SeriesResponse> call, Throwable t) {
-
+               
             }
         });
     }
