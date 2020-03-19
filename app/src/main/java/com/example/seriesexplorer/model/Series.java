@@ -18,13 +18,13 @@ public class Series implements Serializable {
     @SerializedName("original_name")
     private String name;
     @SerializedName("overview")
-    String description;
+    private String description;
     @SerializedName("poster_path")
-    String imageURL;
+    private String imageURL;
     @SerializedName("vote_average")
-    double rating;
+    private double rating;
     @SerializedName("homepage")
-    String homepage;
+    private String homepage;
 
     public String getHomepage() {
         return homepage;

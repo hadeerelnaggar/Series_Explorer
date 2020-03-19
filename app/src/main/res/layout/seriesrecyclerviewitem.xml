@@ -55,7 +55,8 @@
                 android:textStyle="bold"
                 android:textSize="15sp"
                 android:layout_gravity="start"
-                android:paddingStart="10dp">
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
             </TextView>
         </LinearLayout>
         </LinearLayout>
